@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <input class="search" placeholder="Search for a character"/>
+    <input class="search" placeholder="Search for a character" @input="search"/>
   </header>
   <div class="container">
     <aside class="facets">
@@ -69,7 +69,23 @@
   </div>
 </template>
 <script lang="js">
-  export default {};
+  export default {
+    data() {
+      return {
+        characters: []
+      };
+    },
+    methods: {
+      search(event) {
+        const query = event.target.value;
+        fetch('https://rickandmortyapi.com/api/character/?name=' + query).then(response => response.json())
+            .then(data => {
+              this.characters = data.results;
+              console.log(this.characters);
+            });
+      }
+    }
+  };
 </script>
 <style scoped>
   .header {
