@@ -7,14 +7,16 @@
       <h2>Filters</h2>
       <span>Status</span>
       <ul class="filters">
-        <li class="filter"><label>Alive<input name="filter" type="checkbox"></label></li>
-        <li class="filter"><label>Dead<input name="dead" type="checkbox"></label></li>
-        <li class="filter"><label>Unknown<input name="unknown" type="checkbox"></label></li>
+        <li v-for="filter in filters" v-bind:key="filter" class="filter">
+          <label>
+            {{ filter }}<input checked type="checkbox" @change="changeCheckbox(filter,$event.target.checked)">
+          </label>
+        </li>
       </ul>
     </aside>
     <main>
       <section class="characters">
-        <article v-for="character in characters" v-bind:key="character.id" class="character">
+        <article v-for="character in visibleCharacters" v-bind:key="character.id" class="character">
           <img class="character__image" v-bind:alt="'character image of'+character.name" v-bind:src="character.image">
           <div class="description"> {{ character.name }}
             <div v-bind:class="['status',character.status.toLowerCase()]">{{ character.status }}</div>
@@ -28,7 +30,8 @@
   export default {
     data() {
       return {
-        characters: []
+        characters: [],
+        statusCheckboxesActivated: []
       };
     },
     methods: {
@@ -39,6 +42,21 @@
               this.characters = data.results;
               console.log(this.characters);
             });
+      },
+      changeCheckbox(checkboxValue, checkboxStatus) {
+        if (!this.statusCheckboxesActivated.includes(checkboxValue) && !checkboxStatus) {
+          this.statusCheckboxesActivated.push(checkboxValue);
+        } else {
+          this.statusCheckboxesActivated = this.statusCheckboxesActivated.filter(checkbox => checkbox !== checkbox);
+        }
+      }
+    },
+    computed: {
+      filters() {
+        return this.characters?.reduce((filters, character) => filters.add(character.status), new Set()) ?? [];
+      },
+      visibleCharacters() {
+        return this.characters.filter(character => !this.statusCheckboxesActivated.includes(character.status));
       }
     }
   };
