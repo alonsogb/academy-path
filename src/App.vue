@@ -1,20 +1,20 @@
 <template>
   <header class="header">
-    <SearchInput v-on:search="search"/>
+    <SearchInput v-on:search="setQuery"/>
   </header>
   <div class="container">
     <aside class="facets">
       <h2>Filters</h2>
       <span>Status</span>
       <ul class="filters">
-        <li v-for="filter in filters" v-bind:key="filter">
-          <StatusFilter v-on:clickCheckbox="changeCheckbox(filter,$event.target.checked)">{{ filter }}</StatusFilter>
+        <li v-for="filter in filters.status" v-bind:key="filter">
+          <StatusFilter v-on:clickCheckbox="changeCheckbox(filter)">{{ filter }}</StatusFilter>
         </li>
       </ul>
     </aside>
     <main>
       <section class="characters">
-        <CharacterCard v-for="character in visibleCharacters" v-bind:key="character.id" v-bind:character="character"/>
+        <CharacterCard v-for="character in characters" v-bind:key="character.id" v-bind:character="character"/>
       </section>
     </main>
   </div>
@@ -33,32 +33,43 @@
     data() {
       return {
         characters: [],
-        statusCheckboxesActivated: []
+        query: '',
+        status: '',
+        url: 'https://rickandmortyapi.com/api/character/',
+        /*
+         * HACK:
+         *  In Empathy Platform every request returns you the filters available, as Rick-&-morty API do not retrieve it we hardcode them here.
+         */
+        filters: {
+          status: ['unknown', 'Alive', 'Dead']
+        }
       };
     },
+    watch: {
+      query() {
+        this.search();
+      },
+      status() {
+        this.search();
+      }
+    },
     methods: {
-      search(event) {
-        const query = event.target.value;
-        fetch('https://rickandmortyapi.com/api/character/?name=' + query).then(response => response.json())
+      setQuery(query) {
+        this.query = query;
+      },
+      search() {
+        fetch(this.url + '?name=' + this.query + (this.status ? '&status=' + this.status : '')).then(response => response.json())
             .then(data => {
               this.characters = data.results;
               console.log(this.characters);
             });
       },
-      changeCheckbox(checkboxValue, checkboxStatus) {
-        if (!this.statusCheckboxesActivated.includes(checkboxValue) && !checkboxStatus) {
-          this.statusCheckboxesActivated.push(checkboxValue);
+      changeCheckbox(checkboxValue) {
+        if (this.status === checkboxValue) {
+          this.status = '';
         } else {
-          this.statusCheckboxesActivated = this.statusCheckboxesActivated.filter(checkbox => checkbox !== checkbox);
+          this.status = checkboxValue;
         }
-      }
-    },
-    computed: {
-      filters() {
-        return this.characters?.reduce((filters, character) => filters.add(character.status), new Set()) ?? [];
-      },
-      visibleCharacters() {
-        return this.characters?.filter(character => !this.statusCheckboxesActivated.includes(character.status)) ?? [];
       }
     }
   };

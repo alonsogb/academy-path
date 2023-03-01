@@ -1,7 +1,7 @@
 <template>
   <label class="filter">
     <slot></slot>
-    <input checked type="checkbox" v-on:change="$emit('clickCheckbox',$event)">
+    <input type="radio" v-on:change="$emit('clickCheckbox',$event)" name="status-filter">
   </label>
 </template>
 

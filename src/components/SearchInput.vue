@@ -1,5 +1,5 @@
 <template>
-  <input class="search" placeholder="Search for a character" v-on:input="$emit('search',$event)"/>
+  <input class="search" placeholder="Search for a character" v-on:input="$emit('search',$event.target.value)"/>
 </template>
 
 <script >
