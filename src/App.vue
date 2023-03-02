@@ -6,20 +6,20 @@
     <aside class="facets">
       <h2>Filters</h2>
       <span>Status</span>
-      <ul class="filters">
-        <li v-for="filter in filters.status" v-bind:key="filter">
-          <StatusFilter v-on:clickCheckbox="changeCheckbox(filter)">{{ filter }}</StatusFilter>
-        </li>
-      </ul>
+      <BaseFilterList v-bind:filters="filters.status" v-slot="slotProps">
+        <StatusFilter v-on:clickCheckbox="changeCheckbox(slotProps.filter)">{{ slotProps.filter }}</StatusFilter>
+      </BaseFilterList>
     </aside>
     <main>
-      <section class="characters">
+      <BaseGrid>
         <CharacterCard v-for="character in characters" v-bind:key="character.id" v-bind:character="character"/>
-      </section>
+      </BaseGrid>
     </main>
   </div>
 </template>
 <script lang="js">
+  import BaseFilterList from '@/components/BaseFilterList.vue';
+  import BaseGrid from '@/components/BaseGrid.vue';
   import CharacterCard from '@/components/CharacterCard.vue';
   import SearchInput from '@/components/SearchInput.vue';
   import StatusFilter from '@/components/StatusFilter.vue';
@@ -28,7 +28,9 @@
     components: {
       SearchInput,
       CharacterCard,
-      StatusFilter
+      StatusFilter,
+      BaseFilterList,
+      BaseGrid
     },
     data() {
       return {
@@ -78,18 +80,6 @@
   .header {
     display: flex;
     justify-content: center;
-  }
-
-  .filters {
-    width: 120px;
-    list-style-type: none;
-  }
-
-  .characters {
-    display: flex;
-    flex-flow: row wrap;
-    list-style-type: none;
-    gap: 12px;
   }
 
   .container {
