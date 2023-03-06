@@ -11,6 +11,7 @@ export default {
   methods: {
     setQuery(query) {
       this.$store.commit('setQuery', query)
+      this.$store.dispatch('fetchCharacters');
     }
   }
 }

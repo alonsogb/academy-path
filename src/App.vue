@@ -23,7 +23,6 @@ import BaseGrid from '@/components/BaseGrid.vue';
 import CharacterCard from '@/components/CharacterCard.vue';
 import SearchInput from '@/components/SearchInput.vue';
 import SimpleFilter from '@/components/SimpleFilter.vue';
-import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -35,7 +34,6 @@ export default {
   },
   data() {
     return {
-      url: 'https://rickandmortyapi.com/api/character/?',
       /*
        * HACK:
        *  In Empathy Platform every request returns you the filters available, as Rick-&-morty API do not retrieve it we hardcode them here.
@@ -45,36 +43,12 @@ export default {
       }
     };
   },
-  watch: {
-    query() {
-      this.search();
-    },
-    filter() {
-      this.search();
-    }
+  mounted() {
+    this.$store.dispatch('fetchCharacters');
   },
   computed: {
     characters() {
       return this.$store.getters['getCharacters'];
-    },
-    query(){
-      return this.$store.state.query;
-    },
-    ...mapGetters({
-      filter: 'getFilter',
-    })
-  },
-  methods: {
-    search() {
-      let finalUrl = this.url;
-      if(this.filter) {
-        finalUrl += 'status=' + this.filter;
-      }
-
-      fetch(finalUrl + '&name=' + this.query).then(response => response.json())
-          .then(data => {
-            this.$store.commit('setCharacters', data.results);
-          });
     }
   }
 };
