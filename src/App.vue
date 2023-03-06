@@ -44,11 +44,11 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch('fetchCharacters');
+    this.$store.dispatch('characters/fetchCharacters');
   },
   computed: {
     characters() {
-      return this.$store.getters['getCharacters'];
+      return this.$store.getters['characters/getCharacters'];
     }
   }
 };

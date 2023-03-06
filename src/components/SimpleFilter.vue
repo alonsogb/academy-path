@@ -7,8 +7,8 @@ export default {
   props: ['filter'],
   methods:{
     setFilter() {
-      this.$store.commit('setFilter',this.filter);
-      this.$store.dispatch('fetchCharacters');
+      this.$store.commit('search/setFilter',this.filter);
+      this.$store.dispatch('characters/fetchCharacters');
     }
   }
 }
