@@ -6,16 +6,23 @@ import App from './App.vue'
 const store = createStore({
     state: {
         characters: [],
+        filter: ''
     },
     mutations: {
         setCharacters (state, characters){
             state.characters = characters
+        },
+        setFilter (state, filter){
+            state.filter = filter
         }
     },
     getters: {
         getCharacters(state){
             return state.characters;
-        }
+        },
+        getFilter(state){
+            return state.filter;
+        },
     }
 })
 

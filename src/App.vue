@@ -6,10 +6,8 @@
     <aside class="facets">
       <h2>Filters</h2>
       <span>Status</span>
-      <BaseFilterList :filters="filters.status" v-slot="slotProps">
-        <StatusFilter @clickCheckbox="changeCheckbox(slotProps.filter)">{{
-          slotProps.filter
-        }}</StatusFilter>
+      <BaseFilterList :filters="filters.status" #default="{ filter }">
+        <SimpleFilter :filter="filter" />
       </BaseFilterList>
     </aside>
     <main>
@@ -24,21 +22,21 @@ import BaseFilterList from '@/components/BaseFilterList.vue';
 import BaseGrid from '@/components/BaseGrid.vue';
 import CharacterCard from '@/components/CharacterCard.vue';
 import SearchInput from '@/components/SearchInput.vue';
-import StatusFilter from '@/components/StatusFilter.vue';
+import SimpleFilter from '@/components/SimpleFilter.vue';
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
     SearchInput,
     CharacterCard,
-    StatusFilter,
+    SimpleFilter,
     BaseFilterList,
     BaseGrid
   },
   data() {
     return {
       query: '',
-      status: '',
-      url: 'https://rickandmortyapi.com/api/character/',
+      url: 'https://rickandmortyapi.com/api/character/?',
       /*
        * HACK:
        *  In Empathy Platform every request returns you the filters available, as Rick-&-morty API do not retrieve it we hardcode them here.
@@ -52,31 +50,32 @@ export default {
     query() {
       this.search();
     },
-    status() {
+    filter() {
       this.search();
     }
   },
   computed: {
     characters() {
       return this.$store.getters['getCharacters'];
-    }
+    },
+    ...mapGetters({
+      filter: 'getFilter'
+    })
   },
   methods: {
     setQuery(query) {
       this.query = query;
     },
     search() {
-      fetch(this.url + '?name=' + this.query + (this.status ? '&status=' + this.status : '')).then(response => response.json())
+      let finalUrl = this.url;
+      if(this.filter) {
+        finalUrl += 'status=' + this.filter;
+      }
+
+      fetch(finalUrl + '&name=' + this.query).then(response => response.json())
           .then(data => {
             this.$store.commit('setCharacters', data.results);
           });
-    },
-    changeCheckbox(checkboxValue) {
-      if (this.status === checkboxValue) {
-        this.status = '';
-      } else {
-        this.status = checkboxValue;
-      }
     }
   }
 };
