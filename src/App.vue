@@ -36,7 +36,6 @@ export default {
   },
   data() {
     return {
-      characters: [],
       query: '',
       status: '',
       url: 'https://rickandmortyapi.com/api/character/',
@@ -57,6 +56,11 @@ export default {
       this.search();
     }
   },
+  computed: {
+    characters() {
+      return this.$store.getters['getCharacters'];
+    }
+  },
   methods: {
     setQuery(query) {
       this.query = query;
@@ -64,8 +68,7 @@ export default {
     search() {
       fetch(this.url + '?name=' + this.query + (this.status ? '&status=' + this.status : '')).then(response => response.json())
           .then(data => {
-            this.characters = data.results;
-            console.log(this.characters);
+            this.$store.commit('setCharacters', data.results);
           });
     },
     changeCheckbox(checkboxValue) {
