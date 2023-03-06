@@ -1,13 +1,23 @@
 <template>
-  <input class="search" placeholder="Search for a character" v-on:input="$emit('search',$event.target.value)"/>
+  <input
+    class="search"
+    placeholder="Search for a character"
+    @input="setQuery($event.target.value)"
+  />
 </template>
 
-<script >
-  export default  {}
+<script>
+export default {
+  methods: {
+    setQuery(query) {
+      this.$store.commit('setQuery', query)
+    }
+  }
+}
 </script>
 
 <style scoped>
-  .search {
-    width: 600px;
-  }
+.search {
+  width: 600px;
+}
 </style>
