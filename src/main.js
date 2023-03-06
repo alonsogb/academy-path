@@ -5,6 +5,7 @@ import App from './App.vue'
 // Create a new store instance.
 const store = createStore({
     state: {
+        query: '',
         characters: [],
         filter: ''
     },
@@ -14,6 +15,9 @@ const store = createStore({
         },
         setFilter (state, filter){
             state.filter = filter
+        },
+        setQuery(state,query) {
+            state.query = query;
         }
     },
     getters: {

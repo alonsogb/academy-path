@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <SearchInput @search="setQuery" />
+    <SearchInput />
   </header>
   <div class="container">
     <aside class="facets">
@@ -35,7 +35,6 @@ export default {
   },
   data() {
     return {
-      query: '',
       url: 'https://rickandmortyapi.com/api/character/?',
       /*
        * HACK:
@@ -58,14 +57,14 @@ export default {
     characters() {
       return this.$store.getters['getCharacters'];
     },
+    query(){
+      return this.$store.state.query;
+    },
     ...mapGetters({
-      filter: 'getFilter'
+      filter: 'getFilter',
     })
   },
   methods: {
-    setQuery(query) {
-      this.query = query;
-    },
     search() {
       let finalUrl = this.url;
       if(this.filter) {
