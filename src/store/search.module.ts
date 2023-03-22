@@ -1,4 +1,12 @@
-export const searchModule = {
+import {Module} from "vuex";
+import {SearchState, RootState} from "@/store/types";
+
+export const state: SearchState = {
+  filter: '',
+  query: ''
+};
+
+export const searchModule: Module<SearchState, RootState> = {
   namespaced: true,
   state: () => ({
     query: '',

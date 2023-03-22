@@ -17,14 +17,15 @@
     </main>
   </div>
 </template>
-<script lang="js">
+<script lang="ts">
+import { defineComponent } from 'vue';
 import BaseFilterList from '@/components/BaseFilterList.vue';
 import BaseGrid from '@/components/BaseGrid.vue';
 import CharacterCard from '@/components/CharacterCard.vue';
 import SearchInput from '@/components/SearchInput.vue';
 import SimpleFilter from '@/components/SimpleFilter.vue';
 
-export default {
+export default defineComponent({
   components: {
     SearchInput,
     CharacterCard,
@@ -51,7 +52,7 @@ export default {
       return this.$store.getters['characters/getCharacters'];
     }
   }
-};
+});
 </script>
 <style scoped>
 .header {

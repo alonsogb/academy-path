@@ -1,11 +1,18 @@
-export const charactersModule = {
+import {Module} from "vuex";
+import {CharactersState, RootState} from "@/store/types";
+
+export const state: CharactersState = {
+  characters: []
+};
+
+export const charactersModule: Module<CharactersState, RootState> = {
   namespaced: true,
   state: () => ({
     characters: []
   }),
   actions: {
     async fetchCharacters({ commit, rootGetters }) {
-      let url = 'https://rickandmortyapi.com/api/character/?'
+      const url = 'https://rickandmortyapi.com/api/character/?'
       try {
         fetch(url + rootGetters['search/getParams'])
           .then((response) => response.json())
