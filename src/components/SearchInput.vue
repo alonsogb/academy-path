@@ -2,6 +2,7 @@
   <input
     class="search"
     placeholder="Search for a character"
+    data-test="search-input"
     @input="setQuery($event.target.value)"
   />
 </template>
