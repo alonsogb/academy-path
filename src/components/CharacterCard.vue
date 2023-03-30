@@ -1,7 +1,7 @@
 <template>
   <article class="character">
-    <img class="character__image" v-bind:alt="'character image of'+character.name" v-bind:src="character.image">
-    <div class="character__description"> {{ character.name }}
+    <img class="character__image" v-bind:alt="'character image of '+character.name" v-bind:src="character.image" data-test="character-image">
+    <div class="character__description" data-test="character-description"> {{ character.name }}
       <div v-bind:class="['character__status','character__status--'+character.status.toLowerCase()]">{{ character.status }}</div>
     </div>
   </article>
