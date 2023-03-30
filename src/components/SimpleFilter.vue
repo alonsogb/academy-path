@@ -1,5 +1,5 @@
 <template>
-  <button @click="setFilter">{{ filter }}</button>
+  <button @click="setFilter" data-test="filter-button">{{ filter }}</button>
 </template>
 
 <script>
