@@ -1,6 +1,6 @@
 <template>
   <ul class="filters">
-    <li v-for="filter in filters" v-bind:key="filter">
+    <li v-for="filter in filters" v-bind:key="filter" data-test="filter-item">
       <slot :filter="filter"></slot>
     </li>
   </ul>
